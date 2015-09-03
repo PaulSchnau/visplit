@@ -7,6 +7,14 @@
 meteor-platform
 autopublish
 insecure
-reactjs:react
 meteorhacks:kadira
-iron:router
+twbs:bootstrap
+react
+meteorhacks:npm
+cosmos:browserify
+
+
+npm-container
+accounts-ui
+accounts-password
+momentjs:moment

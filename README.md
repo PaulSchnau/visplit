@@ -1,5 +1,5 @@
 # Visplit
-An experimental web splitter. This goal is to show many splitters in real time. 
+An experimental web splitter. This goal is to show many splitters in real time.
 Live at [visplit.com](http://visplit.com)
 
 ## Development

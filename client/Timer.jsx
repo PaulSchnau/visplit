@@ -32,8 +32,11 @@ Timer = React.createClass({
     return m+":"+s+"."+ms;
   },
   resume: function(){
-    if (this.state !== undefined && this.state.timer === undefined){
-      this.setState({timer: setInterval(this.tick, 16)});
+    if (!this.state){
+      this.setState({timer: setInterval(this.tick, 33)});
+    }
+    else if (!this.state.timer){
+      this.setState({timer: setInterval(this.tick, 33)});
     }
   },
   pause: function(){
@@ -53,7 +56,7 @@ Timer = React.createClass({
           start: new Date()
         }
       });
-    } else { 
+    } else {
       TimersCollection.update(this.props.timer._id, {
         $set: {
           isStart: false,
@@ -62,13 +65,21 @@ Timer = React.createClass({
       });
     }
   },
-  setLap: function() {
-    var lapElapsed = this.props.timer.laps.length ? this.props.timer.laps[0].elapsed : 0;
-    var lapTitle = "Lap"+(this.props.timer.laps.length+1);
-    var lapTime = lapTitle+": "+this.getTimeSpan(this.state.elapsed - lapElapsed);
-    var lapElem = { label: lapTime, elapsed: this.state.elapsed, id:lapTitle+this.props.timer._id };
+  split: function() {
+    var splitDuration = this.props.timer.splits.length ? this.props.timer.splits[0].elapsed : 0;
+    var id = this.props.timer.splits.length+1;
+    var splitTime = this.getTimeSpan(this.state.elapsed - splitDuration);
+    var image = 'http://i.imgur.com/egVKTZC.png';
+    var splitElem = {
+            time: splitTime,
+            elapsed: this.state.elapsed,
+            id:id+this.props.timer._id,
+            name: 'New split',
+            image: image
+        };
+
     TimersCollection.update(this.props.timer._id, {
-        $set: {laps: [lapElem].concat(this.props.timer.laps)}
+        $set: {splits: [splitElem].concat(this.props.timer.splits)}
       });
   },
   reset: function() {
@@ -79,7 +90,7 @@ Timer = React.createClass({
           isStart: false,
           elapsed: 0,
           diff: 0,
-          laps: []
+          splits: []
         }
       });
   },
@@ -87,31 +98,17 @@ Timer = React.createClass({
     return (
       <div>
         <h1>{this.getTimeSpan(this.state.elapsed)}</h1>
-        <button onClick={this.onClick} style={style.button}>
-          {this.props.timer.isStart ? "pause" : "start"}
-        </button>
-        <button onClick={this.setLap} style={style.button}>lap</button>
-        <button onClick={this.reset} style={style.button}>reset</button>
-        <ul style={style.lap}>
-          {this.props.timer.laps.map(function(lap) {
-            return <li key={lap.id}>{lap.label}</li>;
+        <div className="btn-toolbar" role="toolbar">
+            <button onClick={this.onClick} className="btn btn-primary">
+              {this.props.timer.isStart ? "pause" : "start"}
+            </button>
+            <button onClick={this.split} className="btn btn-primary">split</button>
+            <button onClick={this.reset} className="btn btn-danger">reset</button>
+        </div>
+          {this.props.timer.splits.map(function(split) {
+            return <Split split={split} key={split.id} />;
           })}
-        </ul>
       </div>
     );
   }
 });
-
-var style = {
-  button: {
-    fontSize: 20,
-    height: 44,
-    width: 88,
-    margin: 5,
-  },
-  lap: {
-    fontSize: 28,
-    padding: 5,
-    listStyleType: 'none',
-  }
-};

@@ -17,4 +17,11 @@ cosmos:browserify
 npm-container
 accounts-ui
 accounts-password
-momentjs:moment
+service-configuration
+http
+email
+meteorhacks:ssr
+accounts-google
+accounts-twitter
+accounts-github
+accounts-facebook

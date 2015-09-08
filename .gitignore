@@ -1,0 +1,5 @@
+.meteor/local
+packages/*
+mup.json
+server/secrets.js
+.DS_Store
